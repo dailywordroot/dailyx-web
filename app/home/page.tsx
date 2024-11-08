@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 import {
@@ -26,7 +25,7 @@ interface Palavra {
 export default function HomePage() {
   const [busca, setBusca] = useState("")
   const [idiomaFiltro, setIdiomaFiltro] = useState("todos")
-  const [idiomaAtual, setIdiomaAtual] = useState("Português")
+  // const [idiomaAtual, setIdiomaAtual] = useState("Português")
   
   // Dados de exemplo - substituir por dados reais da API
   const palavras: Palavra[] = [

@@ -66,16 +66,16 @@ export default function LoginPage() {
           </form>
         </CardContent>
         <CardFooter className="justify-center px-4 sm:px-6">
-          {/* <Button
+          <Button
             variant="ghost"
             onClick={() => setIsRegistered(!isRegistered)}
-            className="text-cyan-600 hover:text-cyan-800 hover:bg-cyan-50 text-sm sm:text-base"
+            className="text-cyan-600 hover:text-cyan-800 hover:bg-cyan-50 text-sm sm:text-base hidden"
           >
             {isRegistered 
               ? "Usar outro e-mail" 
               : "Já tenho uma conta"
             }
-          </Button> */}
+          </Button>
         </CardFooter>
       </Card>
     </div>

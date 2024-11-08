@@ -24,7 +24,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-white relative overflow-hidden">
       {/* Formas geométricas decorativas */}
-      <div className="absolute inset-0 overflow-hidden">
+      {/* <div className="absolute inset-0 overflow-hidden">
         <motion.div
           animate={{
             rotate: 360,
@@ -49,7 +49,7 @@ export default function Home() {
           }}
           className="absolute top-1/2 -right-20 w-60 h-60 bg-blue-300/20 rounded-full blur-xl"
         />
-      </div>
+      </div> */}
 
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
@@ -125,17 +125,17 @@ export default function Home() {
               </Link>
             </Button>
           </div>
+        </motion.div>
+      </div>
 
-          {/* Tags descritivas com animação */}
-          <motion.div 
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1 }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto"
-          >
+      {/* Seção de Benefícios */}
+      <div className="bg-cyan-50 py-20">
+        <div className="max-w-6xl mx-auto px-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-12">Por que escolher nossa plataforma?</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <motion.div 
               whileHover={{ scale: 1.05 }}
-              className="p-6 bg-white rounded-2xl shadow-[0_0_30px_rgba(0,0,0,0.1)] hover:shadow-[0_0_50px_rgba(0,0,0,0.15)] transition-all duration-500"
+              className="p-6 bg-white rounded-2xl shadow-lg"
             >
               <h3 className="text-xl font-bold text-gray-800 mb-2">Aprendizado Inteligente</h3>
               <p className="text-gray-600">Algoritmo adaptativo que evolui com você</p>
@@ -143,7 +143,7 @@ export default function Home() {
 
             <motion.div 
               whileHover={{ scale: 1.05 }}
-              className="p-6 bg-white rounded-2xl shadow-[0_0_30px_rgba(0,0,0,0.1)] hover:shadow-[0_0_50px_rgba(0,0,0,0.15)] transition-all duration-500"
+              className="p-6 bg-white rounded-2xl shadow-lg"
             >
               <h3 className="text-xl font-bold text-gray-800 mb-2">Método Científico</h3>
               <p className="text-gray-600">Baseado em estudos de neurociência</p>
@@ -151,14 +151,75 @@ export default function Home() {
 
             <motion.div 
               whileHover={{ scale: 1.05 }}
-              className="p-6 bg-white rounded-2xl shadow-[0_0_30px_rgba(0,0,0,0.1)] hover:shadow-[0_0_50px_rgba(0,0,0,0.15)] transition-all duration-500"
+              className="p-6 bg-white rounded-2xl shadow-lg"
             >
               <h3 className="text-xl font-bold text-gray-800 mb-2">Resultados Reais</h3>
               <p className="text-gray-600">Acompanhe sua evolução em tempo real</p>
             </motion.div>
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
       </div>
+
+      {/* Seção Como Funciona */}
+      <div className="bg-white py-20">
+        <div className="max-w-6xl mx-auto px-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-12">Como Funciona</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <div>
+              <Image
+                src="/email-template.jpeg"
+                alt="Email Diário"
+                width={500}
+                height={400}
+                className="rounded-lg shadow-xl"
+              />
+            </div>
+            <div className="space-y-6">
+              <h3 className="text-2xl font-bold text-gray-800">Receba palavras diariamente</h3>
+              <p className="text-lg text-gray-600">
+                Todo dia você receberá um email personalizado com novas palavras para aprender,
+                exercícios práticos e dicas de memorização.
+              </p>
+              <ul className="space-y-4">
+                <li className="flex items-center space-x-3">
+                  <span className="text-cyan-500">✓</span>
+                  <span>Emails personalizados</span>
+                </li>
+                <li className="flex items-center space-x-3">
+                  <span className="text-cyan-500">✓</span>
+                  <span>Acompanhamento de progresso</span>
+                </li>
+                <li className="flex items-center space-x-3">
+                  <span className="text-cyan-500">✓</span>
+                  <span>Exercícios interativos</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Seção de Oferta Especial */}
+      <div className="bg-cyan-50 py-20">
+        <div className="max-w-4xl mx-auto px-4 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-6">Oferta por Tempo Limitado! 🎉</h2>
+          <p className="text-xl text-gray-600 mb-4">
+            Assine agora e ganhe <span className="font-bold text-cyan-600">um desconto</span> nos primeiros 3 meses!
+          </p>
+          <p className="text-lg text-gray-500 mb-8">
+            Não perca essa oportunidade única de transformar seu aprendizado.
+          </p>
+          <Button 
+            className={`bg-gradient-to-r ${gradientColors[currentGradient]} text-white px-8 py-6 text-lg rounded-full transition-all duration-500 transform hover:scale-105 hover:shadow-2xl font-medium`}
+            asChild
+          >
+            <Link href="/planos">
+              Aproveitar Oferta
+            </Link>
+          </Button>
+        </div>
+      </div>
+
     </div>
   )
 }

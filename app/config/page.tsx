@@ -30,7 +30,7 @@ export default function ConfigPage() {
     setIdiomasConfig([...idiomasConfig, { idioma: "", palavrasPorDia: 2, tipoEnvio: "Texto" }])
   }
 
-  const updateIdiomaConfig = (index: number, field: keyof IdiomaConfig, value: any) => {
+  const updateIdiomaConfig = (index: number, field: keyof IdiomaConfig, value: string | number) => {
     const newConfig = [...idiomasConfig]
     newConfig[index] = { ...newConfig[index], [field]: value }
     setIdiomasConfig(newConfig)
