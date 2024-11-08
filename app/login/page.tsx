@@ -18,12 +18,13 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100">
-      <Card className="w-[400px] shadow-lg">
-        <CardHeader>
-          <h1 className="text-2xl font-bold text-center text-blue-900">Login</h1>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-cyan-50 to-cyan-100 px-4 py-8">
+      <Card className="w-full max-w-[400px] shadow-xl border-cyan-200">
+        <CardHeader className="px-4 sm:px-6">
+          <h1 className="text-2xl sm:text-3xl font-bold text-center text-cyan-900">Bem-vindo de volta</h1>
+          <p className="text-sm sm:text-base text-center text-cyan-600 mt-2">Acesse sua conta para continuar</p>
         </CardHeader>
-        <CardContent>
+        <CardContent className="px-4 sm:px-6">
           <form onSubmit={handleSubmit} className="space-y-4">
             {!isRegistered ? (
               <>
@@ -33,10 +34,10 @@ export default function LoginPage() {
                     placeholder="Seu e-mail"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="border-blue-200 focus:border-blue-400"
+                    className="border-cyan-200 focus:border-cyan-400 bg-white/50 w-full text-sm sm:text-base"
                   />
-                  <p className="text-sm text-blue-600 hover:text-blue-800">
-                    <Link href="/register">Fazer cadastro</Link>
+                  <p className="text-xs sm:text-sm text-cyan-600 hover:text-cyan-800">
+                    <Link href="/register">Criar uma nova conta</Link>
                   </p>
                 </div>
               </>
@@ -48,33 +49,33 @@ export default function LoginPage() {
                     placeholder="Sua senha"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="border-blue-200 focus:border-blue-400"
+                    className="border-cyan-200 focus:border-cyan-400 bg-white/50 w-full text-sm sm:text-base"
                   />
-                  <p className="text-sm text-blue-600 hover:text-blue-800">
-                    <Link href="/reset-password">Resetar senha</Link>
+                  <p className="text-xs sm:text-sm text-cyan-600 hover:text-cyan-800">
+                    <Link href="/reset-password">Esqueceu sua senha?</Link>
                   </p>
                 </div>
               </>
             )}
             <Button 
               type="submit" 
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+              className="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-semibold text-sm sm:text-base py-2 sm:py-3"
             >
               {isRegistered ? "Entrar" : "Continuar"}
             </Button>
           </form>
         </CardContent>
-        <CardFooter className="justify-center">
-          <Button
+        <CardFooter className="justify-center px-4 sm:px-6">
+          {/* <Button
             variant="ghost"
             onClick={() => setIsRegistered(!isRegistered)}
-            className="text-blue-600 hover:text-blue-800"
+            className="text-cyan-600 hover:text-cyan-800 hover:bg-cyan-50 text-sm sm:text-base"
           >
             {isRegistered 
               ? "Usar outro e-mail" 
               : "Já tenho uma conta"
             }
-          </Button>
+          </Button> */}
         </CardFooter>
       </Card>
     </div>

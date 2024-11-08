@@ -1,3 +1,4 @@
+
 "use client"
 
 import { Button } from "@/components/ui/button"
@@ -8,10 +9,7 @@ import { useEffect, useState } from "react"
 
 export default function Home() {
   const gradientColors = [
-    "from-purple-600 via-pink-500 to-red-500",
-    "from-blue-600 via-indigo-500 to-purple-500", 
-    "from-emerald-600 via-teal-500 to-cyan-500",
-    "from-orange-600 via-amber-500 to-yellow-500"
+    "from-blue-400 via-cyan-400 to-cyan-500",
   ];
 
   const [currentGradient, setCurrentGradient] = useState(0);
@@ -25,7 +23,35 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-white relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Formas geométricas decorativas */}
+      <div className="absolute inset-0 overflow-hidden">
+        <motion.div
+          animate={{
+            rotate: 360,
+            scale: [1, 1.1, 1],
+          }}
+          transition={{
+            duration: 20,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+          className="absolute -top-20 -left-20 w-40 h-40 bg-cyan-300/20 rounded-full blur-xl"
+        />
+        <motion.div
+          animate={{
+            rotate: -360,
+            scale: [1, 1.2, 1],
+          }}
+          transition={{
+            duration: 15,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+          className="absolute top-1/2 -right-20 w-60 h-60 bg-blue-300/20 rounded-full blur-xl"
+        />
+      </div>
+
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -45,8 +71,8 @@ export default function Home() {
               ease: "easeInOut"
             }}
             whileHover={{
-              scale: 1.2,
-              rotate: [0, -10, 10, -10, 0],
+              scale: 1,
+              pointsAtY: -3,
               transition: { duration: 0.5 }
             }}
             className="mb-8 cursor-pointer"
