@@ -1,20 +1,27 @@
 "use client"
 
-import { useState } from "react"
+import axios, { AxiosError } from 'axios';
+import { Dispatch, SetStateAction, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card"
+import { toast } from "sonner"
 import Link from "next/link"
 
 export default function LoginPage() {
   const [isRegistered, setIsRegistered] = useState(false)
+  const [isVerify, setIsVerify] = useState(false)
   const [email, setEmail] = useState("")
+  const [otpCode, setOtpCode] = useState("")
   const [password, setPassword] = useState("")
 
-  const handleSubmit = (e: React.FormEvent) => {
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Aqui você implementaria a lógica de autenticação
-    console.log({ email, password })
+    
+    if(isVerify) await login(email, otpCode);
+    else await verify(email, setIsVerify);
+
   }
 
   return (
@@ -29,15 +36,31 @@ export default function LoginPage() {
             {!isRegistered ? (
               <>
                 <div className="space-y-2">
-                  <Input
-                    type="email"
-                    placeholder="Seu e-mail"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="border-cyan-200 focus:border-cyan-400 bg-white/50 w-full text-sm sm:text-base"
-                  />
-                  <p className="text-xs sm:text-sm text-cyan-600 hover:text-cyan-800">
-                    <Link href="/register">Criar uma nova conta</Link>
+                  {!isVerify
+                  ? (
+                    <Input
+                      type="email"
+                      placeholder="Seu e-mail"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="border-cyan-200 focus:border-cyan-400 bg-white/50 w-full text-sm sm:text-base"
+                    />
+                  )
+                  : (
+                    <Input
+                      type="number"
+                      placeholder="Código de acesso"
+                      value={otpCode}
+                      onChange={(e) => setOtpCode(e.target.value)}
+                      className="border-cyan-200 focus:border-cyan-400 bg-white/50 w-full text-sm sm:text-base"
+                    />
+                    )
+                  }
+                  <p className="text-xs sm:text-sm text-cyan-600 hover:text-cyan-800 text-center">
+                    {!isVerify
+                      ? <Link href="/register">Criar uma nova conta</Link>
+                      : <span>Reenviar código de acesso</span>
+                    }
                   </p>
                 </div>
               </>
@@ -81,3 +104,38 @@ export default function LoginPage() {
     </div>
   )
 }
+async function login(email: string, otpCode: string) {
+  const statusMessage: any = {
+    201: "Sucesso",
+  };
+
+  try {
+    const { status, data } = await axios.post('http://localhost:3001/auth/login', { email, otpCode });
+    // console.log({ data })
+    toast.info(statusMessage[status] || data?.response?.message);
+    localStorage.setItem('access_token', data?.access_token);
+    localStorage.setItem('imageUrl', data?.imageUrl);
+    window.location.href = '/home';
+  }
+  catch (error: any) {
+    toast.error(statusMessage[error.status] || error?.response?.data?.message || "Aconteceu um erro inesperado");
+  }
+}
+async function verify(email: string, setIsVerify: Dispatch<SetStateAction<boolean>>) {
+  const statusMessage: any = {
+    201: "Um código de verificação foi enviado para o seu e-mail !",
+    400: "E-mail não encontrado!"
+  };
+
+  try {
+    const { status } = await axios.post('http://localhost:3001/auth/verify', { email });
+
+    toast.info(statusMessage[status || 400]);
+
+    setIsVerify(status == 201);
+  }
+  catch (error: any) {
+    toast.error(statusMessage[error.status] || "Aconteceu um erro inesperado");
+  }
+}
+

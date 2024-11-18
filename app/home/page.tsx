@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 import {
@@ -13,13 +13,17 @@ import {
 } from "@/components/ui/table"
 import { Card, CardHeader, CardContent } from "@/components/ui/card"
 import Header from "@/components/ui/header"
+import { http } from "@/lib/http"
 
 interface Palavra {
   id: number
-  data: string
+  createdAt: string
   palavra: string
-  idioma: string
+  languageId: number
   tipo: string
+  wordEnglish?: {
+    name: string
+  }
 }
 
 export default function HomePage() {
@@ -28,18 +32,25 @@ export default function HomePage() {
   // const [idiomaAtual, setIdiomaAtual] = useState("Português")
   
   // Dados de exemplo - substituir por dados reais da API
-  const palavras: Palavra[] = [
-    { id: 1, data: "2024-01-15", palavra: "Serendipidade", idioma: "Português", tipo: "Texto" },
-    { id: 2, data: "2024-01-16", palavra: "Wanderlust", idioma: "Inglês", tipo: "Imagem" },
-    { id: 3, data: "2024-01-17", palavra: "Saudade", idioma: "Português", tipo: "Texto" },
-  ]
+  const [palavras, setPalavras] = useState(new Array<Palavra>())
+  const wordsName: any = {
+    1: 'wordEnglish'
+  }
 
   const palavrasFiltradas = palavras.filter(palavra => {
-    const matchBusca = palavra.palavra.toLowerCase().includes(busca.toLowerCase())
-    const matchIdioma = idiomaFiltro === "todos" || palavra.idioma === idiomaFiltro
+    const matchBusca = palavra.wordEnglish?.name.toLowerCase().includes(busca.toLowerCase())
+    const matchIdioma = idiomaFiltro === "0" || String(palavra.languageId) == idiomaFiltro
     return matchBusca && matchIdioma
   })
 
+  useEffect(() => {
+    getWordsSend(setPalavras);
+  }, [])
+
+  const getWord = (palavra: Palavra) => {
+    const word = palavra?.wordEnglish?.name
+    return word
+  }
   return (
     <>
       <Header />
@@ -52,21 +63,41 @@ export default function HomePage() {
           <CardContent className="px-4 sm:px-6">
             <div className="flex flex-col gap-4 mb-6">
               <div className="flex flex-col sm:flex-row gap-4">
+                
+              <div className="relative flex-1">
                 <Input
                   placeholder="Buscar palavra..."
                   value={busca}
                   onChange={(e) => setBusca(e.target.value)}
-                  className="border-cyan-200 focus:border-cyan-400 bg-white/50 flex-1"
+                  className="border-cyan-200 focus:border-cyan-400 bg-white/50 pr-10"
                 />
+                <button 
+                  onClick={() => getWordsSend(setPalavras)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-cyan-500 hover:text-cyan-700"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="11" cy="11" r="8"/>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                  </svg>
+                </button>
+              </div>
+                
+                {/* <Input
+                  placeholder="Buscar palavra..."
+                  value={busca}
+                  onChange={(e) => setBusca(e.target.value)}
+                  className="border-cyan-200 focus:border-cyan-400 bg-white/50 flex-1"
+                /> */}
+
                 <Select value={idiomaFiltro} onValueChange={setIdiomaFiltro}>
                   <SelectTrigger className="w-full sm:w-[180px] border-cyan-200 focus:border-cyan-400 bg-white/50">
                     <SelectValue placeholder="Filtrar por idioma" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="todos">Todos os idiomas</SelectItem>
-                    <SelectItem value="Português" disabled>Português</SelectItem>
-                    <SelectItem value="Inglês">Inglês</SelectItem>
-                    <SelectItem value="Espanhol" disabled>Espanhol</SelectItem>
+                    <SelectItem value="0">Todos os idiomas</SelectItem>
+                    <SelectItem value="2" disabled>Português</SelectItem>
+                    <SelectItem value="1">Inglês</SelectItem>
+                    <SelectItem value="3" disabled>Espanhol</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -85,13 +116,13 @@ export default function HomePage() {
                   {palavrasFiltradas.map((palavra) => (
                     <TableRow key={palavra.id} className="cursor-pointer hover:bg-cyan-50">
                       <TableCell className="text-cyan-800 whitespace-nowrap px-4 sm:px-6">
-                        {new Date(palavra.data).toLocaleDateString('pt-BR')}
+                        {new Date(palavra.createdAt).toLocaleDateString('pt-BR')}
                       </TableCell>
                       <TableCell className="font-medium text-cyan-800 px-4 sm:px-6">
-                        {palavra.palavra}
+                        {getWord(palavra)}
                       </TableCell>
                       <TableCell className="text-cyan-800 whitespace-nowrap px-4 sm:px-6">
-                        {palavra.tipo}
+                        {palavra.tipo || 'Descrição'}
                       </TableCell>
                     </TableRow>
                   ))}
@@ -103,4 +134,10 @@ export default function HomePage() {
       </div>
     </>
   )
+}
+
+async function getWordsSend(setPalavras: any) {
+  const response = await http.get('/word-sends')
+  setPalavras(response)
+  return response
 }

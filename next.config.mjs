@@ -8,7 +8,12 @@ const nextConfig = {
         port: '',
         pathname: '/system/resources/previews/**',
       },
-    ],
+      {
+        protocol: 'https',
+        hostname: 'www.gravatar.com',
+        port: '',
+        pathname: '/avatar/**',
+      }    ],
   }
 };
 

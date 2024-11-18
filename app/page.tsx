@@ -140,28 +140,23 @@ export default function Home() {
               <p className="text-lg text-gray-600 mb-8">
                 Assim como um investimento que cresce com juros compostos, seu vocabulário se expande exponencialmente quando você aprende a cada dia.
               </p>
-              <div className="space-y-4">
-                <div className="flex items-center gap-4">
-                  <div className="bg-cyan-100 p-3 rounded-full">
-                    <span className="text-cyan-600 text-xl">📈</span>
-                  </div>
-                  <p className="text-gray-700">Acompanhe seu progresso diário</p>
-                </div>
-                <div className="flex items-center gap-4">
-                  <div className="bg-cyan-100 p-3 rounded-full">
-                    <span className="text-cyan-600 text-xl">🎯</span>
-                  </div>
-                  <p className="text-gray-700">Defina metas personalizadas</p>
-                </div>
-                <div className="flex items-center gap-4">
-                  <div className="bg-cyan-100 p-3 rounded-full">
-                    <span className="text-cyan-600 text-xl">🏆</span>
-                  </div>
-                  <p className="text-gray-700">Celebre suas conquistas</p>
-                </div>
-              </div>
+              <ul className="space-y-4 pl-6">
+                <li className="text-gray-700">
+                  <span className="text-cyan-500">✓ </span>
+                  <span>Acompanhe seu progresso diário</span>
+                </li>
+                <li className="text-gray-700">
+                  <span className="text-cyan-500">✓ </span>
+                  <span>Defina metas personalizadas</span>
+                </li>
+                <li className="text-gray-700">
+                  <span className="text-cyan-500">✓ </span>
+                  <span>Celebre suas conquistas</span>
+                </li>
+              </ul>
             </div>
             <div>
+              {/* 
               <Image
                 src="/grafico.jpeg"
                 alt="Gráfico de Progresso"
@@ -169,6 +164,8 @@ export default function Home() {
                 height={500}
                 className="rounded-lg shadow-xl"
               />
+              
+              */}
             </div>
           </div>
         </div>

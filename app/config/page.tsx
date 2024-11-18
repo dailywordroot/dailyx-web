@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -12,33 +12,57 @@ import {
 } from "@/components/ui/select"
 import { Card, CardHeader, CardContent } from "@/components/ui/card"
 import Header from "@/components/ui/header"
+import { http } from "@/lib/http"
+import { toast } from "sonner"
 
 interface IdiomaConfig {
   idioma: string
   palavrasPorDia: number
   tipoEnvio: string
+  isActive: boolean
 }
 
 export default function ConfigPage() {
   const [nome, setNome] = useState("Usuário")
   const [email, setEmail] = useState("usuario@email.com")
+  const [config, setConfig] = useState<any>({});
   const [idiomasConfig, setIdiomasConfig] = useState<IdiomaConfig[]>([
-    { idioma: "Inglês", palavrasPorDia: 2, tipoEnvio: "Texto" }
+    { idioma: "Inglês", palavrasPorDia: 2, tipoEnvio: "Texto", isActive: true }
   ])
 
   const handleAddIdioma = () => {
-    setIdiomasConfig([...idiomasConfig, { idioma: "", palavrasPorDia: 2, tipoEnvio: "Texto" }])
+    setIdiomasConfig([...idiomasConfig, { idioma: "", palavrasPorDia: 2, tipoEnvio: "Texto", isActive: true }])
   }
 
-  const updateIdiomaConfig = (index: number, field: keyof IdiomaConfig, value: string | number) => {
+  const updateIdiomaConfig = (index: number, field: keyof IdiomaConfig, value: string | number | boolean) => {
     const newConfig = [...idiomasConfig]
     newConfig[index] = { ...newConfig[index], [field]: value }
     setIdiomasConfig(newConfig)
   }
 
   const removeIdioma = (index: number) => {
-    setIdiomasConfig(idiomasConfig.filter((_, i) => i !== index))
+    const newConfig = [...idiomasConfig]
+    newConfig.splice(index, 1)
+    setIdiomasConfig(newConfig)
   }
+
+  const getUserConfig = async () => {
+    const result = await http.get("/users-configurations");
+    setConfig(result as any);
+  }
+
+  const handleSubmit = async () => {
+    try {
+      const result = await http.put("/users-configurations", config);
+      toast.success("Configurações salvas com sucesso!")
+    } catch (error) {
+      toast.error("Erro ao enviar configurações")
+    }
+  }
+
+  useEffect(() => {
+    getUserConfig()
+  }, [])
 
   return (
     <div>
@@ -54,17 +78,17 @@ export default function ConfigPage() {
               <h2 className="text-xl sm:text-2xl font-semibold text-cyan-800">Informações Pessoais</h2>
               <div className="grid gap-4">
                 <div>
-                  <label className="text-sm sm:text-base text-cyan-700">Nome</label>
+                  <label className="text-sm sm:text-base text-cyan-700">Nome do usuário</label>
                   <Input
-                    value={nome}
-                    onChange={(e) => setNome(e.target.value)}
+                    value={config?.username}
+                    onChange={(e) => setConfig({ ...config, username: e.target.value })}
                     className="border-cyan-200 focus:border-cyan-400 bg-white/50 text-sm sm:text-base"
                   />
                 </div>
                 <div>
                   <label className="text-sm sm:text-base text-cyan-700">Email</label>
                   <Input
-                    value={email}
+                    value={config?.email}
                     onChange={(e) => setEmail(e.target.value)}
                     disabled={true}
                     className="border-cyan-200 focus:border-cyan-400 bg-white/50 text-sm sm:text-base"
@@ -131,7 +155,8 @@ export default function ConfigPage() {
                   <Button
                     variant="ghost"
                     onClick={() => removeIdioma(index)}
-                    className="text-red-600 hover:text-red-800 text-sm sm:text-base w-full sm:w-auto"
+                    className="text-sm sm:text-base w-full sm:w-auto text-red-600 hover:text-red-800"
+                    disabled
                   >
                     Remover
                   </Button>
@@ -148,7 +173,7 @@ export default function ConfigPage() {
 
             <Button 
               className="w-full bg-cyan-600 hover:bg-cyan-700 text-white mt-6 text-sm sm:text-base py-2 sm:py-3"
-              onClick={() => console.log("Salvar configurações", { nome, email, idiomasConfig })}
+              onClick={() => handleSubmit()}
             >
               Salvar Configurações
             </Button>
