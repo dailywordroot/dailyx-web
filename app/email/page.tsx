@@ -25,7 +25,7 @@ export default function EmailTemplate() {
               className="mb-6"
             >
               <Image
-                src="https://static.vecteezy.com/system/resources/previews/021/276/936/non_2x/cute-axolotl-axolotl-illustration-sea-salamander-sea-life-marine-life-png.png"
+                src="/logo.png"
                 alt="Axolote mascote"
                 width={100}
                 height={100}
@@ -43,6 +43,53 @@ export default function EmailTemplate() {
 
           {/* Palavras do Dia */}
           <div className="space-y-8">
+
+          {/* <div className="bg-cyan-50 p-6 rounded-lg">
+              <h3 className="text-xl font-bold text-cyan-800 mb-2">Transformer</h3>
+              <p className="text-gray-600">
+                Changer complètement l'apparence ou le caractère de quelque chose ou quelqu'un.
+                Tout comme notre application transforme votre expérience d'apprentissage du vocabulaire.
+              </p>
+            </div>
+
+            <div className="bg-cyan-50 p-6 rounded-lg">
+              <h3 className="text-xl font-bold text-cyan-800 mb-2">Intelligent</h3>
+              <p className="text-gray-600">
+                Avoir ou montrer de l'intelligence et une capacité mentale rapide.
+                Notre système d'apprentissage adaptatif est conçu pour être intelligent, comme vous !
+              </p>
+            </div>
+
+            <div className="bg-cyan-50 p-6 rounded-lg">
+              <h3 className="text-xl font-bold text-cyan-800 mb-2">Progrès</h3>
+              <p className="text-gray-600">
+                Développement vers une condition améliorée ou plus avancée.
+                Suivez vos progrès quotidiens et regardez votre vocabulaire s'enrichir avec nous.
+              </p>
+            </div> */}
+            {/* <div className="bg-cyan-50 p-6 rounded-lg">
+              <h3 className="text-xl font-bold text-cyan-800 mb-2">Transformar</h3>
+              <p className="text-gray-600">
+                Cambiar completamente la apariencia o el carácter de algo o alguien.
+                Así como nuestra aplicación transforma tu experiencia de aprendizaje de vocabulario.
+              </p>
+            </div>
+
+            <div className="bg-cyan-50 p-6 rounded-lg">
+              <h3 className="text-xl font-bold text-cyan-800 mb-2">Inteligente</h3>
+              <p className="text-gray-600">
+                Tener o mostrar inteligencia y capacidad mental rápida.
+                ¡Nuestro sistema de aprendizaje adaptativo está diseñado para ser inteligente, como tú!
+              </p>
+            </div>
+
+            <div className="bg-cyan-50 p-6 rounded-lg">
+              <h3 className="text-xl font-bold text-cyan-800 mb-2">Progreso</h3>
+              <p className="text-gray-600">
+                Desarrollo hacia una condición mejorada o más avanzada.
+                Sigue tu progreso diario y observa cómo crece tu vocabulario con nosotros.
+              </p>
+            </div> */}
             <div className="bg-cyan-50 p-6 rounded-lg">
               <h3 className="text-xl font-bold text-cyan-800 mb-2">Transform</h3>
               <p className="text-gray-600">

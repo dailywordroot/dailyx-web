@@ -25,6 +25,11 @@ interface Palavra {
     name: string
   }
 }
+interface Languages {
+  1: Palavra[],
+  2: Palavra[],
+  3: Palavra[]
+}
 
 export default function HomePage() {
   const [busca, setBusca] = useState("")
@@ -32,21 +37,20 @@ export default function HomePage() {
   // const [idiomaAtual, setIdiomaAtual] = useState("Português")
   
   // Dados de exemplo - substituir por dados reais da API
-  const [palavras, setPalavras] = useState(new Array<Palavra>())
-  const wordsName: any = {
-    1: 'wordEnglish'
-  }
+  const [palavras, setPalavras] = useState<Languages>({ "1": [], "2": [], "3": [] })
 
   const palavrasFiltradas = 
-    
-    palavras.filter(palavra => {
+    palavras?.[idiomaFiltro as unknown as 1 | 2 | 3]?.filter(palavra => {
       const matchBusca = palavra.word?.name.toLowerCase().includes(busca.toLowerCase())
       const matchIdioma = String(palavra.languageId) == idiomaFiltro
       return matchBusca && matchIdioma
-    }
-  )
+    })
 
-  useEffect(() => {
+    console.log(palavras, {...palavras})
+
+    console.log({palavrasFiltradas, palavras, idiomaFiltro})
+
+  useEffect(() => { 
     getWordsSend(setPalavras, idiomaFiltro);
   }, [])
 
@@ -89,7 +93,12 @@ export default function HomePage() {
                   className="border-cyan-200 focus:border-cyan-400 bg-white/50 flex-1"
                 /> */}
 
-                <Select value={idiomaFiltro} onValueChange={v => { setIdiomaFiltro(v); getWordsSend(setPalavras, v) }}>
+                <Select value={idiomaFiltro} onValueChange={v => {
+                  setIdiomaFiltro(v)
+                  if(!palavras[v as unknown as 1 | 2 | 3]?.length) {
+                    getWordsSend(setPalavras, v)
+                  }
+                }}>
                   <SelectTrigger className="w-full sm:w-[180px] border-cyan-200 focus:border-cyan-400 bg-white/50">
                     <SelectValue placeholder="Filtrar por idioma" />
                   </SelectTrigger>
@@ -113,7 +122,7 @@ export default function HomePage() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {palavrasFiltradas.map((palavra) => (
+                  {palavras[idiomaFiltro as unknown as 1 | 2 | 3]?.map((palavra) => (
                     <TableRow key={palavra.id} className="cursor-pointer hover:bg-cyan-50">
                       <TableCell className="text-cyan-800 whitespace-nowrap px-4 sm:px-6">
                         {new Date(palavra.createdAt).toLocaleDateString('pt-BR')}
@@ -135,9 +144,11 @@ export default function HomePage() {
     </>
   )
 }
-
 async function getWordsSend(setPalavras: any, languageId: string) {
   const response = await http.get(`/word-sends?languageId=${languageId}`)
-  setPalavras(response)
+  setPalavras((v: any) => {
+    v[languageId] = response;
+    return v;
+  })
   return response
 }

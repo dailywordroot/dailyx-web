@@ -1,14 +1,15 @@
 import Image from "next/image"
 import Link from "next/link"
+import Cookies from "js-cookie";
 
 export default function Header() {
-  const imageUrl = localStorage.getItem('imageUrl') || '';
+  const imageUrl = Cookies.get('imageUrl') || '';
 
   return (
     <div className="w-full h-16 bg-white border-b border-cyan-100 px-4 flex items-center justify-between">
         <Link href="/home" className="flex items-center gap-2">
           <Image 
-            src="https://static.vecteezy.com/system/resources/previews/021/276/936/non_2x/cute-axolotl-axolotl-illustration-sea-salamander-sea-life-marine-life-png.png"
+            src="/logo.png"
             alt="Logo"
             width={40}
             height={40}

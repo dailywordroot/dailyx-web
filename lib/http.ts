@@ -1,5 +1,7 @@
 
 import axios, { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
+import Cookies from "js-cookie";
+import { toast } from 'sonner';
 
 const api: AxiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001',
@@ -12,7 +14,7 @@ const api: AxiosInstance = axios.create({
 // Request interceptor
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('access_token');
+    const token = Cookies.get('access_token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -30,7 +32,8 @@ api.interceptors.response.use(
   },
   (error: AxiosError) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem('token');
+      toast("Sessão expirou. Entre novamente!")
+      Cookies.remove('access_token');
       window.location.href = '/login';
     }
     return Promise.reject(error);

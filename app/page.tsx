@@ -5,8 +5,12 @@ import Link from "next/link"
 import { motion } from "framer-motion"
 import Image from "next/image"
 import { APP_NAME } from "@/lib/constants"
+import { useState } from "react"
 
 export default function Home() {
+
+  const [currentImage, setCurrentImage] = useState("/email/ingles.png")
+
   return (
     <div className="min-h-screen bg-white relative overflow-hidden">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
@@ -27,7 +31,8 @@ export default function Home() {
                     className="cursor-pointer"
                   >
                     <Image
-                      src="https://static.vecteezy.com/system/resources/previews/021/276/936/non_2x/cute-axolotl-axolotl-illustration-sea-salamander-sea-life-marine-life-png.png"
+                      src="/logo.png"
+                      //src="https://static.vecteezy.com/system/resources/previews/021/276/936/non_2x/cute-axolotl-axolotl-illustration-sea-salamander-sea-life-marine-life-png.png"
                       alt="Axolote mascote"
                       width={60}
                       height={60}
@@ -87,7 +92,7 @@ export default function Home() {
                     className="bg-gradient-to-r from-cyan-400 to-cyan-600 text-white hover:shadow-lg transition-all"
                     asChild
                   >
-                    <Link href="/register">Começar Grátis</Link>
+                    <Link href="/register">Começar</Link>
                   </Button>
                 </div>
               </div>
@@ -208,10 +213,21 @@ export default function Home() {
       <div id="como-funciona" className="bg-white py-20">
         <div className="max-w-6xl mx-auto px-4">
           <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-12">Como Funciona</h2>
+          <div className="flex justify-center gap-4 mb-8">
+            <button onClick={() => setCurrentImage("/email/ingles.png")} className="flex items-center gap-2 px-4 py-2 bg-white border rounded-lg hover:bg-gray-50">
+              🇺🇸 Inglês
+            </button>
+            <button onClick={() => setCurrentImage("/email/espanhol.png")} className="flex items-center gap-2 px-4 py-2 bg-white border rounded-lg hover:bg-gray-50">
+              🇪🇸 Espanhol
+            </button>
+            <button onClick={() => setCurrentImage("/email/frances.png")} className="flex items-center gap-2 px-4 py-2 bg-white border rounded-lg hover:bg-gray-50">
+              🇫🇷 Francês
+            </button>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div>
               <Image
-                src="/email-template.jpeg"
+                src={currentImage || "/email-template.jpeg"}
                 alt="Email Diário"
                 width={500}
                 height={400}
@@ -236,6 +252,9 @@ export default function Home() {
                   <span className="text-cyan-500">✓</span>
                   <span>Suporte personalizado 24/7</span>
                 </li>
+                <li className="flex items-center space-x-3">
+                  <span className="text-cyan-500">✓</span>
+                  <span>Idiomas disponíveis: Inglês, Espanhol e Francês - com novos idiomas em breve!</span>                </li>
               </ul>
             </div>
           </div>
@@ -245,19 +264,19 @@ export default function Home() {
       {/* Seção de Oferta Especial */}
       <div className="bg-cyan-50 py-20">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-6">Oferta por Tempo Limitado! 🎉</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-6">Comece Agora</h2>
           <p className="text-xl text-gray-600 mb-4">
-            Assine agora e ganhe <span className="font-bold text-cyan-600">um desconto</span> nos primeiros 3 meses!
+            Escolha um plano e comece sua jornada de aprendizado
           </p>
           <p className="text-lg text-gray-500 mb-8">
-            Não perca essa oportunidade única de transformar seu aprendizado.
+            Transforme seu aprendizado de idiomas de forma simples e eficiente
           </p>
           <Button 
             className="bg-gradient-to-r from-cyan-400 to-cyan-600 text-white px-8 py-6 text-lg rounded-full transition-all duration-500 transform hover:scale-105 hover:shadow-2xl font-medium"
             asChild
           >
-            <Link href="/planos">
-              Aproveitar Oferta
+            <Link href="/plans">
+              Ver Planos
             </Link>
           </Button>
         </div>

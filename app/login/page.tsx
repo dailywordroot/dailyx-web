@@ -1,6 +1,7 @@
 "use client"
 
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
+import Cookies from 'js-cookie'
 import { Dispatch, SetStateAction, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -113,8 +114,20 @@ async function login(email: string, otpCode: string) {
     const { status, data } = await axios.post('http://localhost:3001/auth/login', { email, otpCode });
     // console.log({ data })
     toast.info(statusMessage[status] || data?.response?.message);
-    localStorage.setItem('access_token', data?.access_token);
-    localStorage.setItem('imageUrl', data?.imageUrl);
+    // localStorage.setItem('access_token', data?.access_token);
+    // localStorage.setItem('imageUrl', data?.imageUrl);
+    Cookies.set('access_token', data?.access_token, {
+      path: '/',
+      secure: true,  // Apenas se estiver usando HTTPS
+      sameSite: 'strict',
+    });
+
+    Cookies.set('imageUrl', data?.imageUrl, {
+      path: '/',
+      secure: true,
+      sameSite: 'strict',
+    });
+
     window.location.href = '/home';
   }
   catch (error: any) {
