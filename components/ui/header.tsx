@@ -1,6 +1,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import Cookies from "js-cookie";
+import { Button } from "./button";
 
 export default function Header() {
   const imageUrl = Cookies.get('imageUrl') || '';
@@ -16,19 +17,31 @@ export default function Header() {
           />
           <span className="text-xl font-bold text-cyan-900">DailyWord</span>
         </Link>
-        <Link href="/config">
-          <div className="w-10 h-10 rounded-full bg-cyan-100 flex items-center justify-center cursor-pointer hover:bg-cyan-200">
-            <Image
-              style={{
-                borderRadius: '50%',
-              }}
-              src={imageUrl}
-              alt="User"
-              width={40}
-              height={40}
-            />
-          </div>
-        </Link>
+        <div className="flex items-center gap-4">
+          <Link href="/config">
+            <div className="w-10 h-10 rounded-full bg-cyan-100 flex items-center justify-center cursor-pointer hover:bg-cyan-200">
+              <Image
+                style={{
+                  borderRadius: '50%',
+                }}
+                src={imageUrl}
+                alt="User"
+                width={40}
+                height={40}
+              />
+            </div>
+          </Link>
+          <Button
+            variant={'ghost'}
+            onClick={() => {
+              Cookies.remove('access_token')
+              Cookies.remove('imageUrl')
+              window.location.href = '/'
+            }}
+          >
+            Sair
+          </Button>
+        </div>
       </div>
   )
 }
