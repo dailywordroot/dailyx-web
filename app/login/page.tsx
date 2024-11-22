@@ -8,6 +8,8 @@ import { Input } from "@/components/ui/input"
 import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card"
 import { toast } from "sonner"
 import Link from "next/link"
+import Image from 'next/image';
+import createCheckout from '@/lib/create-checkout';
 
 export default function LoginPage() {
   const [isRegistered, setIsRegistered] = useState(false)
@@ -15,6 +17,10 @@ export default function LoginPage() {
   const [email, setEmail] = useState("")
   const [otpCode, setOtpCode] = useState("")
   const [password, setPassword] = useState("")
+
+  const [loading, setLoading] = useState(false)
+
+  
 
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -29,6 +35,17 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-cyan-50 to-cyan-100 px-4 py-8">
       <Card className="w-full max-w-[400px] shadow-xl border-cyan-200">
         <CardHeader className="px-4 sm:px-6">
+          <div className="flex items-center justify-center">
+            <Link href="/">
+              <Image
+                src="/logo.png"
+                alt="Logo"
+                width={60}
+                height={60}
+                className="cursor-pointer"
+              />
+            </Link>
+          </div>
           <h1 className="text-2xl sm:text-3xl font-bold text-center text-cyan-900">Bem-vindo de volta</h1>
           <p className="text-sm sm:text-base text-center text-cyan-600 mt-2">Acesse sua conta para continuar</p>
         </CardHeader>
@@ -60,7 +77,7 @@ export default function LoginPage() {
                   }
                   <p className="text-xs sm:text-sm text-cyan-600 hover:text-cyan-800 text-center">
                     {!isVerify
-                      ? <Link href="/register">Criar uma nova conta</Link>
+                      ? <Button disabled={loading} type='button' variant={'ghost'} onClick={() => createCheckout({ planType: '1m', setLoading })}>{  !loading ? 'Criar uma nova conta' : 'Carregando checkout'  }</Button>
                       : <span>Reenviar código de acesso</span>
                     }
                   </p>

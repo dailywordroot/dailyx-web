@@ -5,7 +5,7 @@ export function middleware(request: NextRequest) {
   const token = request.cookies.get('access_token')
   const { pathname } = request.nextUrl
 
-  const publicPaths = ['/', '/login', '/register']
+  const publicPaths = ['/', '/login']
   const isPublicPath = publicPaths.includes(pathname)
 
   if (!token && !isPublicPath) {
@@ -20,5 +20,5 @@ export function middleware(request: NextRequest) {
 }
  
 export const config = {
-  matcher: ['/', '/login', '/register', '/home', '/config']
+  matcher: ['/', '/login', '/home', '/config']
 }
