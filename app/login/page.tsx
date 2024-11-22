@@ -27,7 +27,9 @@ export default function LoginPage() {
     e.preventDefault()
     
     if(isVerify) await login(email, otpCode);
-    else await verify(email, setIsVerify);
+    else {
+      await verify(email, setIsVerify)
+    };
 
   }
 
@@ -124,7 +126,7 @@ export default function LoginPage() {
   )
 }
 async function login(email: string, otpCode: string) {
-  const statusMessage: any = {
+  const statusMessage: StatusType = {
     201: "Sucesso",
   };
 
@@ -148,12 +150,24 @@ async function login(email: string, otpCode: string) {
 
     window.location.href = '/home';
   }
-  catch (error: any) {
-    toast.error(statusMessage[error.status] || error?.response?.data?.message || "Aconteceu um erro inesperado");
+  catch (error: unknown) {
+    if (typeof error === 'object' && error !== null && 'status' in error && 'response' in error) {
+      const typedError = error as { status: number; response: { data: { message: string } } };
+      toast.error(statusMessage[typedError.status] || typedError.response?.data?.message || "Aconteceu um erro inesperado");
+    } else {
+      toast.error("Aconteceu um erro inesperado");
+    }
   }
 }
+
+type StatusType = {
+  [key: number]: string
+}
 async function verify(email: string, setIsVerify: Dispatch<SetStateAction<boolean>>) {
-  const statusMessage: any = {
+  type StatusType = {
+    [key: number]: string
+  }
+  const statusMessage: StatusType = {
     201: "Um código de verificação foi enviado para o seu e-mail !",
     400: "E-mail não encontrado!"
   };
@@ -166,8 +180,12 @@ async function verify(email: string, setIsVerify: Dispatch<SetStateAction<boolea
 
     setIsVerify(status == 201);
   }
-  catch (error: any) {
-    toast.error(statusMessage[error.status] || "Aconteceu um erro inesperado");
+  catch (error: unknown) {
+    if (typeof error === 'object' && error !== null && 'status' in error) {
+      const typedError = error as { status: number, response: { data: { message: string } } };
+      toast.error(statusMessage[typedError.status] || "Aconteceu um erro inesperado");
+    } else {
+      toast.error("Aconteceu um erro inesperado");
+    }
   }
 }
-

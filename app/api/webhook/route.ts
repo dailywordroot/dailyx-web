@@ -19,7 +19,6 @@ export async function POST(req: Request) {
       case "checkout.session.completed":
         if (event.data.object.payment_status === "paid") {
           // pagagamento por cartão com sucesso
-          const testeId = event.data.object.metadata?.testeId;
           const customerData = event.data.object.customer_details;
           const planType = event.data.object.metadata?.planType;
 
@@ -59,7 +58,7 @@ export async function POST(req: Request) {
 
           if (hostedVoucherUrl) {
             // O cliente gerou um boleto, manda um email pra ele
-            const userEmail = event.data.object.customer_details?.email;
+            // const userEmail = event.data.object.customer_details?.email;
             console.log("gerou o boleto e o link é", hostedVoucherUrl);
           }
         }

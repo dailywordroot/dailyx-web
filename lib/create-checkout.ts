@@ -1,7 +1,8 @@
 import { loadStripe } from "@stripe/stripe-js";
 
 type SubscriptionType = "1m" | '3m' | '6m' | '1y'
-export default async function ({ planType, setLoading }: { planType: SubscriptionType, setLoading: Function }) {
+// @typescript-eslint/no-unsafe-function-type
+export default async function createCheckout ({ planType, setLoading }: { planType: SubscriptionType, setLoading: Function }) {
     setLoading(true);
     try {
         const checkoutResponse = await fetch("/api/create-checkout", {

@@ -33,9 +33,6 @@ export default function HomePage() {
   
   // Dados de exemplo - substituir por dados reais da API
   const [palavras, setPalavras] = useState(new Array<Palavra>())
-  const wordsName: any = {
-    1: 'wordEnglish'
-  }
 
   const palavrasFiltradas = 
     
@@ -47,7 +44,7 @@ export default function HomePage() {
   )
 
   useEffect(() => {
-    getWordsSend(setPalavras, idiomaFiltro);
+    getWordsSend(setPalavras, '1');
   }, [])
 
 
@@ -135,9 +132,9 @@ export default function HomePage() {
     </>
   )
 }
-
+// eslint-disable-next-lineasync 
 async function getWordsSend(setPalavras: any, languageId: string) {
   const response = await http.get(`/word-sends?languageId=${languageId}`)
   setPalavras(response)
-  return response
+  // return response
 }

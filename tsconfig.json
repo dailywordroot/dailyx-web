@@ -28,7 +28,8 @@
     },
     "types": [
       "react"
-    ]
+    ],
+    "useDefineForClassFields": true
   },
   "include": [
     "next-env.d.ts",

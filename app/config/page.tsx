@@ -23,26 +23,39 @@ interface IdiomaConfig {
   isActive: boolean
 }
 
+interface configType {
+  username: string
+  email: string
+  configuration: {
+    userLanguages: IdiomaConfig[]
+  }
+}
+
 export default function ConfigPage() {
-  const [nome, setNome] = useState("Usuário")
-  const [email, setEmail] = useState("usuario@email.com")
-  const [config, setConfig] = useState<any>({});
+  // const [nome, setNome] = useState("Usuário")
+  // const [email, setEmail] = useState("usuario@email.com")
+  // @typescript-eslint/no-explict-any
+  const [config, setConfig] = useState<configType>({ 
+    email: "",
+    username: "",
+    configuration: {
+    userLanguages: []
+  } });
   const [loading, setLoading] = useState(true);
   const [idiomasConfig, setIdiomasConfig] = useState<IdiomaConfig[]>([
     { languageId: "2", take: 2, tipoEnvio: "Texto", isActive: true }
   ])
 
   const handleAddIdioma = () => {
-    type UserLanguage = {
-      languageId: number
-    }
     const languages = [1, 2, 3]
-    const userLanguages: UserLanguage[] = config.configuration.userLanguages || []
-    const languageId = userLanguages.map(x => x.languageId).find(x => !languages.includes(x));
+    const userLanguages: IdiomaConfig[] = config.configuration.userLanguages || []
+    const languageId: string | number = userLanguages.map(x => x.languageId).find(x => !languages.includes(+x)) || 1;
 
-    const newLanguage = {
+    const newLanguage: IdiomaConfig = {
       take: 2,
-      languageId
+      languageId,
+      isActive: true,
+      tipoEnvio: "Texto"
     }
     
     config.configuration.userLanguages.push(newLanguage)
@@ -51,20 +64,23 @@ export default function ConfigPage() {
   }
 
   const updateIdiomaConfig = (index: number, field: keyof IdiomaConfig, value: string | number | boolean) => {
+    if (index >= 0 && index < config.configuration.userLanguages.length) {
+      config.configuration.userLanguages[index] = {
+        ...config.configuration.userLanguages[index],
+        [field]: value
+      }
 
-    config.configuration.userLanguages[index][field] = value
-
-    const newConfig = [...idiomasConfig]
-    newConfig[index] = { ...newConfig[index], [field]: value }
-    setIdiomasConfig(newConfig)
-  }
-  
+      const newConfig = [...idiomasConfig]
+      newConfig[index] = { ...newConfig[index], [field]: value }
+      setIdiomasConfig(newConfig)
+    }
+  }  
   const addIdioma = async (index: number) => {
 
     const { languageId = '0', take } = config.configuration.userLanguages[index]
     
     try {
-      await http.post(`/users-configurations/${parseInt(languageId)}`, { take })
+      await http.post(`/users-configurations/${languageId}`, { take })
       toast.info("Língua criada com sucesso!");
       const newConfig = [...idiomasConfig]
       setIdiomasConfig(newConfig)
@@ -80,10 +96,10 @@ export default function ConfigPage() {
 
     const { languageId = '0' } = config.configuration.userLanguages[index]
 
-    config.configuration.userLanguages.pop(index)
+    config.configuration.userLanguages.splice(index, 1)
     
     try {
-      await http.delete(`/users-configurations/${parseInt(languageId)}`)
+      await http.delete(`/users-configurations/${languageId}`)
       toast.info("Língua deletada com sucesso!");
       const newConfig = [...idiomasConfig]
       newConfig.splice(index, 1)
@@ -96,13 +112,12 @@ export default function ConfigPage() {
 
 
   }
-
   const getUserConfig = async () => {
     setLoading(true);
     try {
       const result = await http.get("/users-configurations");
       console.log(result);
-      setConfig(result as any);
+      setConfig(result as configType);
     } finally {
       setLoading(false);
     }
@@ -110,9 +125,9 @@ export default function ConfigPage() {
 
   const handleSubmit = async () => {
     try {
-      const result = await http.put("/users-configurations", config);
+      await http.put("/users-configurations", config);
       toast.success("Configurações salvas com sucesso!")
-    } catch (error) {
+    } catch {
       toast.error("Erro ao enviar configurações")
     }
   }
@@ -176,7 +191,6 @@ export default function ConfigPage() {
                   <label className="text-sm sm:text-base text-cyan-700">Email</label>
                   <Input
                     value={config?.email}
-                    onChange={(e) => setEmail(e.target.value)}
                     disabled={true}
                     className="border-cyan-200 focus:border-cyan-400 bg-white/50 text-sm sm:text-base"
                   />
@@ -186,6 +200,7 @@ export default function ConfigPage() {
 
             <div className="space-y-4">
               <h2 className="text-xl sm:text-2xl font-semibold text-cyan-800">Configurações de Idiomas</h2>
+              {/* @typescript-eslint/no-explict-any */}
               {config?.configuration?.userLanguages?.map((lang: any, index: number) => (
                 <section key={index} className="mb-6 p-4 bg-white/30 rounded-lg border border-cyan-100">
                   <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-end">

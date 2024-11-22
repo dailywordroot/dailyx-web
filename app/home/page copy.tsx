@@ -51,7 +51,7 @@ export default function HomePage() {
     console.log({palavrasFiltradas, palavras, idiomaFiltro})
 
   useEffect(() => { 
-    getWordsSend(setPalavras, idiomaFiltro);
+    getWordsSend(setPalavras, '1');
   }, [])
 
 
@@ -144,11 +144,15 @@ export default function HomePage() {
     </>
   )
 }
-async function getWordsSend(setPalavras: any, languageId: string) {
+// @typescript-eslint/no-explict-any
+async function getWordsSend(setPalavras: Function, languageId: string) {
   const response = await http.get(`/word-sends?languageId=${languageId}`)
-  setPalavras((v: any) => {
-    v[languageId] = response;
-    return v;
-  })
+  // 
+  setPalavras((v: Languages) => {
+    return {
+      ...v,
+      [languageId as unknown as keyof Languages]: response
+    };
+  });
   return response
 }
