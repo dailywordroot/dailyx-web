@@ -26,7 +26,7 @@ export async function POST(req: Request) {
           console.log("pagamento por cartão com sucesso", { customerData, planType });
 
           try {
-            const r = await fetch("http://localhost:3001/auth/register", {
+            const r = await fetch(`${process.env.NEXT_PUBLIC_API_URL }/auth/register`, {
               body: JSON.stringify({ email: customerData?.email, planType }),
               method: 'POST',
               headers: {

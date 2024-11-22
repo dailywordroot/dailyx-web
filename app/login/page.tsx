@@ -129,7 +129,7 @@ async function login(email: string, otpCode: string) {
   };
 
   try {
-    const { status, data } = await axios.post('http://localhost:3001/auth/login', { email, otpCode });
+    const { status, data } = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, { email, otpCode });
     // console.log({ data })
     toast.info(statusMessage[status] || data?.response?.message);
     // localStorage.setItem('access_token', data?.access_token);
@@ -159,7 +159,8 @@ async function verify(email: string, setIsVerify: Dispatch<SetStateAction<boolea
   };
 
   try {
-    const { status } = await axios.post('http://localhost:3001/auth/verify', { email });
+    const newLocal = `${process.env.NEXT_PUBLIC_API_URL}/auth/verify`;
+    const { status } = await axios.post(newLocal, { email });
 
     toast.info(statusMessage[status || 400]);
 
