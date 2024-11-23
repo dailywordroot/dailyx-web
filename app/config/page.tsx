@@ -10,11 +10,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 import { Card, CardHeader, CardContent } from "@/components/ui/card"
 import Header from "@/components/ui/header"
 import { http } from "@/lib/http"
 import { toast } from "sonner"
 import { Skeleton } from "@/components/ui/skeleton"
+import cancelSubs from "@/lib/cancel-subscription"
 
 interface IdiomaConfig {
   languageId: number | string
@@ -26,6 +38,13 @@ interface IdiomaConfig {
 interface configType {
   username: string
   email: string
+  plan: {
+    subscriptionId: string
+    endDate: string
+    plan: {
+      duration: string
+    }
+  }
   configuration: {
     userLanguages: IdiomaConfig[]
   }
@@ -38,9 +57,17 @@ export default function ConfigPage() {
   const [config, setConfig] = useState<configType>({ 
     email: "",
     username: "",
+    plan: {
+      endDate: '',
+      subscriptionId: '',
+      plan: {
+        duration: ''
+      },
+    },
     configuration: {
-    userLanguages: []
-  } });
+      userLanguages: []
+    } 
+});
   const [loading, setLoading] = useState(true);
   const [idiomasConfig, setIdiomasConfig] = useState<IdiomaConfig[]>([
     { languageId: "2", take: 2, tipoEnvio: "Texto", isActive: true }
@@ -116,7 +143,6 @@ export default function ConfigPage() {
     setLoading(true);
     try {
       const result = await http.get("/users-configurations");
-      console.log(result);
       setConfig(result as configType);
     } finally {
       setLoading(false);
@@ -129,6 +155,18 @@ export default function ConfigPage() {
       toast.success("Configurações salvas com sucesso!")
     } catch {
       toast.error("Erro ao enviar configurações")
+    }
+  }
+  const cancelSubscription = async () => {
+    const subscriptionId = config.plan.subscriptionId;
+    try {
+      await getUserConfig() 
+      await http.post(`/users-configurations/cancel-subscription/${subscriptionId}`);
+      await cancelSubs({ subscriptionId });
+      toast('Plano cancelado com sucesso')
+    }
+    catch {
+      toast.error('Não foi possível cancelar seu plano, entre em contato ou tente novamente')
     }
   }
 
@@ -195,6 +233,65 @@ export default function ConfigPage() {
                     className="border-cyan-200 focus:border-cyan-400 bg-white/50 text-sm sm:text-base"
                   />
                 </div>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <h2 className="text-xl sm:text-2xl font-semibold text-cyan-800">Plano</h2>
+              <div className="flex gap-8">
+                <div>
+                  <label className="text-sm sm:text-base text-cyan-700">Tipo de Plano</label>
+                  <div className="flex justify-between items-center mt-2">
+                  
+                    <Select
+                      value={config?.plan.plan.duration}
+                      disabled={true}
+                      style={{ border: '1px solid cyan.200', backgroundColor: 'whiteAlpha.500', fontSize: '0.875rem', padding: '0.5rem 1rem' }}
+                    >
+                      <SelectTrigger style={{ border: '1px solid cyan.200', backgroundColor: 'whiteAlpha.500', fontSize: '0.875rem', padding: '0.5rem 1rem' }}>
+                        <SelectValue placeholder="Selecione um plano" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="1m">1 mês</SelectItem>
+                        <SelectItem value="3m">3 meses</SelectItem>
+                        <SelectItem value="6m">6 meses</SelectItem>
+                        <SelectItem value="1y">1 ano</SelectItem>
+                      </SelectContent>
+                    </Select>
+
+                  
+                  </div>
+                </div>
+                  <div>
+                    <label className="text-sm sm:text-base text-cyan-700">Data Atual</label>
+                    <Input
+                      value={new Date().toLocaleDateString()}
+                      disabled={true}
+                      style={{ border: '1px solid cyan.200', backgroundColor: 'whiteAlpha.500', fontSize: '0.875rem', padding: '0.5rem 1rem', marginTop: '0.5rem' }}
+                    />
+                  </div>
+
+                {config.plan?.subscriptionId && (
+                  <div className="flex" style={{ alignItems: 'self-end' }}>
+                    {/* <Button variant={'outline'}>Cancelar</Button> */}
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button variant="outline">Cancelar</Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Você tem certeza ?</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Após o término do seu plano, você não receberá mais mensagens. Deseja confirmar?                        </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel onClick={cancelSubscription}>Continuar</AlertDialogCancel>
+                          <AlertDialogAction>Cancelar</AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </div>
+                )}
               </div>
             </div>
 
