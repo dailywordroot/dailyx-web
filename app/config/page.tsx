@@ -246,8 +246,8 @@ export default function ConfigPage() {
                     <Select
                       value={config?.plan.plan.duration}
                       disabled={true}
-                      style={{ border: '1px solid cyan.200', backgroundColor: 'whiteAlpha.500', fontSize: '0.875rem', padding: '0.5rem 1rem' }}
-                    >
+                      >
+                      {/* style={{ border: '1px solid cyan.200', backgroundColor: 'whiteAlpha.500', fontSize: '0.875rem', padding: '0.5rem 1rem' }} */}
                       <SelectTrigger style={{ border: '1px solid cyan.200', backgroundColor: 'whiteAlpha.500', fontSize: '0.875rem', padding: '0.5rem 1rem' }}>
                         <SelectValue placeholder="Selecione um plano" />
                       </SelectTrigger>
