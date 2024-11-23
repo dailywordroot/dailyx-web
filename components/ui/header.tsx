@@ -15,7 +15,7 @@ export default function Header() {
             width={40}
             height={40}
           />
-          <span className="text-xl font-bold text-cyan-900">DailyWord</span>
+          <span className="text-xl font-bold text-cyan-900">DailyWords</span>
         </Link>
         <div className="flex items-center gap-4">
           <Link href="/config">

@@ -1,1 +1,1 @@
-export const APP_NAME = "DailyWord"
+export const APP_NAME = "DailyWords"
