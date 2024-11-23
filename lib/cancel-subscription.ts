@@ -1,7 +1,3 @@
-import { loadStripe } from "@stripe/stripe-js";
-
-type SubscriptionType = "1m" | '3m' | '6m' | '1y'
-// @typescript-eslint/no-unsafe-function-type
 export default async function cancelSubs ({ subscriptionId }: { subscriptionId: string }) {
     try {
         return await fetch("/api/cancel-subscription", {
